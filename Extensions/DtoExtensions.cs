@@ -3,7 +3,7 @@ using Catalog.Entities;
 
 namespace Catalog
 {
-	public static class Extensions {
+	public static class DtoExtensions {
 		public static ItemDto ToItemDto(this Item item)
 		{
 			return new ItemDto
