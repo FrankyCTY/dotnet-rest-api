@@ -24,10 +24,17 @@ namespace Catalog.Api.Controllers
 
 	  // GET /items
 		[HttpGet]
-		public async Task<IEnumerable<ItemDto>> GetItemsAsync()
+		public async Task<IEnumerable<ItemDto>> GetItemsAsync(string nameToMatch = null)
 		{
 				var items = (await _repository.GetItemsAsync())
 				.Select(item => item.ToItemDto());
+
+				if(!string.IsNullOrWhiteSpace(nameToMatch))
+				{
+					items = items.Where(item => item.Name.Contains(nameToMatch, StringComparison.OrdinalIgnoreCase));
+				}
+
+				_logger.LogInformation($"{DateTime.UtcNow.ToString("hh:mm:ss")}: Retrieved {items}");
 
 				return items;
 		}
