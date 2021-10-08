@@ -35,6 +35,7 @@ namespace Catalog.Api
             BsonSerializer.RegisterSerializer(new DateTimeOffsetSerializer(BsonType.String));
             var mongoDbSettings = Configuration.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>();
 
+            Console.WriteLine($"{mongoDbSettings.Port.ToString()}");
 
             // Mongodb
             services.AddMongoClient(Configuration, mongoDbSettings);
