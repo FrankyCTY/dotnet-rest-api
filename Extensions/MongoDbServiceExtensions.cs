@@ -7,10 +7,9 @@ namespace Catalog.Extensions
 {
     public static class MongoDbServiceExtensions
     {
-        public static IServiceCollection AddMongoClient(this IServiceCollection services, IConfiguration config)
+        public static IServiceCollection AddMongoClient(this IServiceCollection services, IConfiguration config, MongoDbSettings settings)
         {
             services.AddSingleton<IMongoClient>(serviceProvider => {
-                var settings = config.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>();
                 return new MongoClient(settings.ConnectionString);
             });
 

@@ -1,23 +1,21 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Net.Mime;
+using System.Text.Json;
 using Catalog.Extensions;
 using Catalog.Repositories;
 using Catalog.Settings;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
-using MongoDB.Driver;
 
 namespace Catalog
 {
@@ -35,9 +33,11 @@ namespace Catalog
         {
             BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
             BsonSerializer.RegisterSerializer(new DateTimeOffsetSerializer(BsonType.String));
+            var mongoDbSettings = Configuration.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>();
+
 
             // Mongodb
-            services.AddMongoClient(Configuration);
+            services.AddMongoClient(Configuration, mongoDbSettings);
 
             // services.AddSingleton<IItemsRepository, InMemItemRepository>();
             services.AddSingleton<IItemsRepository, MongoDbItemsRepository>();
@@ -48,6 +48,11 @@ namespace Catalog
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Catalog", Version = "v1" });
+            });
+
+            // Health check
+            services.AddHealthChecks().AddMongoDb(mongoDbSettings.ConnectionString, name: "mongodb", timeout: TimeSpan.FromSeconds(3), tags: new[] {
+                "ready"
             });
         }
 
@@ -70,6 +75,28 @@ namespace Catalog
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+
+                endpoints.MapHealthChecks("/health/ready", new HealthCheckOptions {
+                    Predicate = (check) => check.Tags.Contains("ready"),
+                    ResponseWriter = async(httpContext, healthReport) => {
+                        var result = JsonSerializer.Serialize(new {
+                            status = healthReport.Status.ToString(),
+                            checks = healthReport.Entries.Select(entry => new {
+                                name = entry.Key,
+                                status = entry.Value.Status.ToString(),
+                                exception = entry.Value.Exception != null ? entry.Value.Exception.Message : "none",
+                                duration = entry.Value.Duration.ToString()                                
+                            })
+                        });
+
+                        httpContext.Response.ContentType = MediaTypeNames.Application.Json;
+                        await httpContext.Response.WriteAsync(result);
+                    }
+                });
+
+                endpoints.MapHealthChecks("/health/live", new HealthCheckOptions {
+                    Predicate = (_) => false
+                });
             });
         }
     }

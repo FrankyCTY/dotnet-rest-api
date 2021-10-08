@@ -39,3 +39,6 @@
 /home/tak/ownDev/Catalog/bin/Debug/net5.0/runtimes/linux/native/libmongocrypt.so
 /home/tak/ownDev/Catalog/bin/Debug/net5.0/runtimes/osx/native/libmongocrypt.dylib
 /home/tak/ownDev/Catalog/bin/Debug/net5.0/runtimes/win/native/mongocrypt.dll
+/home/tak/ownDev/Catalog/bin/Debug/net5.0/HealthChecks.MongoDb.dll
+/home/tak/ownDev/Catalog/bin/Debug/net5.0/Microsoft.Extensions.Diagnostics.HealthChecks.dll
+/home/tak/ownDev/Catalog/bin/Debug/net5.0/Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions.dll
