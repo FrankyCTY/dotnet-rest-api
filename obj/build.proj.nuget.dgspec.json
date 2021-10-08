@@ -1,0 +1,48 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/tak/ownDev/Catalog/build.proj": {}
+  },
+  "projects": {
+    "/home/tak/ownDev/Catalog/build.proj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/tak/ownDev/Catalog/build.proj",
+        "projectName": "build",
+        "projectPath": "/home/tak/ownDev/Catalog/build.proj",
+        "packagesPath": "/home/tak/.nuget/packages/",
+        "outputPath": "/home/tak/ownDev/Catalog/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/tak/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net45"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net45": {
+            "targetAlias": "net45",
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "net45": {
+          "targetAlias": "net45",
+          "dependencies": {
+            "Microsoft.NETFramework.ReferenceAssemblies": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.0.0, )",
+              "autoReferenced": true
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/5.0.401/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
