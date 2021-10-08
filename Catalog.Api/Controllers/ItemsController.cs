@@ -53,6 +53,7 @@ namespace Catalog.Api.Controllers
 			Item item = new() {
 				Id = Guid.NewGuid(),
 				Name = itemDto.Name,
+				Description = itemDto.Description,
 				Price = itemDto.Price,
 				CreatedDate = DateTimeOffset.UtcNow
 			};
@@ -72,13 +73,11 @@ namespace Catalog.Api.Controllers
 			{
 				return NotFound();
 			}
+			
+			existingItem.Name = itemDto.Name;
+			existingItem.Price = itemDto.Price;
 
-			Item updatedItem = existingItem with {
-				Name = itemDto.Name,
-				Price = itemDto.Price,
-			};
-
-			await _repository.UpdateItemAsync(updatedItem);
+			await _repository.UpdateItemAsync(existingItem);
 			return NoContent();
 		}
 
