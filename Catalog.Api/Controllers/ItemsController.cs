@@ -72,7 +72,7 @@ namespace Catalog.Api.Controllers
 
 		// PUT /items/
 		[HttpPut("{id}")]
-		public async Task<ActionResult> UpdateItemAsync(Guid id, UpdateItemDto itemDto)
+		public async Task<IActionResult> UpdateItemAsync(Guid id, UpdateItemDto itemDto)
 		{
 			var existingItem = await _repository.GetItemAsync(id);
 
@@ -89,7 +89,7 @@ namespace Catalog.Api.Controllers
 		}
 
 		[HttpDelete("{id}")]
-		public async Task<ActionResult> DeleteItemAsync(Guid id)
+		public async Task<IActionResult> DeleteItemAsync(Guid id)
 		{
 			var existingItem = await _repository.GetItemAsync(id);
 
